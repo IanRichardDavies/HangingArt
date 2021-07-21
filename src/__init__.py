@@ -1,0 +1,1 @@
+"""HangingArt init file."""

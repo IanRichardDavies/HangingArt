@@ -1,0 +1,5 @@
+name: hangingart
+channels:
+  - conda-main
+dependencies:
+  - python=3.8.5
