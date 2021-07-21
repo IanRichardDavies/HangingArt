@@ -17,6 +17,7 @@ class Painting:
         vertical_dim: float, 
         category: str,
         prime_flag: int,
+        colours: list,
         possible_spaces: list = None,
         disallowed_space: list = None,
         ):
@@ -25,6 +26,7 @@ class Painting:
         self.vertical_dim = vertical_dim
         self.category = category
         self.prime_flag = prime_flag
+        self.colours = colours
         self.possible_spaces = possible_spaces
         self.disallowed_space = disallowed_space
 

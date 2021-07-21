@@ -6,15 +6,17 @@ Module concerning Space objects
 
 # First Party Imports
 
-class Space():
+class Space:
     """
     Class holding logic for each individual surface
     upon which art can be hung.
     """
     def __init__(
         self,
-        horizontal_dim: float,
-        vertical_dim: float, 
+        max_hor_dim: float, 
+        min_hor_dim: float,
+        max_ver_dim: float, 
+        min_ver_dim: float, 
         room: str,
         surface_dir: str, 
         floor: str,
@@ -24,9 +26,13 @@ class Space():
         disallowed_paintings: list = None,
         categories: list = None,
         disallowed_categories: list = None,
-        ):
-        self.horizontal_dim = horizontal_dim
-        self.vertical_dim = vertical_dim
+        complete_flag: int = 0,
+        colours: list = None,
+        ): 
+        self.max_hor_dim = max_hor_dim
+        self.min_hor_dim = min_hor_dim
+        self.max_ver_dim = max_ver_dim
+        self.min_ver_dim = min_ver_dim
         self.room = room
         self.surface_dir = surface_dir
         self.floor = floor
@@ -37,3 +43,5 @@ class Space():
         self.categories = categories
         self.disallowed_categories = disallowed_categories
         self.name = f"{room} {surface_dir}"
+        self.complete_flag = complete_flag
+        self.colours = colours 

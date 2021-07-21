@@ -7,7 +7,7 @@ Interface to create and access Space objects defined in space.py
 # Python Libraries
 
 # First Party Imports
-from hanginart.space import Space
+from hangingart.space import Space
 
 """
 Order or parameters:
@@ -26,5 +26,5 @@ params = [
 
 ]
 
-def generate_spaces
+def generate_spaces(params):
     return [Space(*param) for param in params]

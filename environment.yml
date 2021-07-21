@@ -1,5 +1,7 @@
 name: hangingart
 channels:
-  - conda-main
+  - defaults
 dependencies:
   - python=3.8.5
+  - numpy
+  - pytest
