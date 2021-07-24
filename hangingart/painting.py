@@ -16,8 +16,10 @@ class Painting:
         horizontal_dim: float,
         vertical_dim: float, 
         category: str,
+        poster: int,
         prime_flag: int,
         colours: list,
+        complete: int = 0,
         possible_spaces: list = None,
         disallowed_space: list = None,
         ):
@@ -25,8 +27,10 @@ class Painting:
         self.horizontal_dim = horizontal_dim
         self.vertical_dim = vertical_dim
         self.category = category
+        self.poster = poster
         self.prime_flag = prime_flag
         self.colours = colours
+        self.complete = complete
         self.possible_spaces = possible_spaces
         self.disallowed_space = disallowed_space
 

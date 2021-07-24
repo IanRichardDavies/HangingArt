@@ -11,8 +11,10 @@ from hangingart.space import Space
 
 """
 Order or parameters:
-    horizontal_dim
-    vertical_dim
+    max_horizontal_dim
+    min_horizontal_dim
+    max_vertical_dim
+    min_vertical_dim
     room
     surface_dir
     floor
@@ -21,8 +23,8 @@ Order or parameters:
 """
 
 params = [
-    (40,40,'kitchen','S','1', 1, 1,),
-    (30,30,'kitchen','W','1', 1, 1,),
+    (40,20,40,20,'kitchen','S','1', 1, 1,),
+    (30,15,30,15,'kitchen','W','1', 1, 1,),
 
 ]
 
