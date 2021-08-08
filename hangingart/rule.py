@@ -4,7 +4,9 @@ Module concerning Rule objects
 
 # Python Libraries
 from abc import ABC, abstractmethod
+from typing import Union
 import numpy as np
+
 
 # First Party Imports
 
@@ -33,8 +35,8 @@ class Rule(ABC):
     '''
     def __init__(
         self,
-        spaces: tuple = (),
-        paintings: tuple = (),
+        spaces: Union[list, tuple] = (),
+        paintings: Union[list, tuple] = (),
         ):
         self.spaces = {i:space for i,space in enumerate(spaces) if spaces}
         self.paintings = {i:space for i,space in enumerate(paintings) if paintings}
@@ -59,33 +61,40 @@ class HorizontalDimRule(Rule):
     '''
     This Rule checks whether the candidate painting fits the horizontal
     space available.
+    Spaces that can hold multiple pieces are not subject to the minimum.
     '''
     def rule(self, space, painting):
-        return space.min_hor_dim <= painting.horizontal_dim <= space.max_hor_dim
-
+        if space.max_pieces == 1:
+            return space.min_hor_dim <= painting.horizontal_dim <= space.max_hor_dim
+        else:
+            return painting.horizontal_dim <= space.max_hor_dim
 
 class VerticalDimRule(Rule):
     '''
     This Rule checks whether the candidate painting fits the vertical
     space available.
+    Spaces that can hold multiple pieces are not subject to the minimum.
     '''
     def rule(self, space, painting):
-        return space.min_ver_dim <= painting.vertical_dim <= space.max_ver_dim
+        if space.max_pieces == 1:
+            return space.min_ver_dim <= painting.vertical_dim <= space.max_ver_dim
+        else:
+            return painting.vertical_dim <= space.max_hor_dim            
 
-
-class IndigenousPopRule(Rule):
+class IndigenousPopArtRule(Rule):
     '''
     This Rule prevents a Pop Art painting and an Indigenous painting
     being hung on the same surface as it would lead to a clash
     of styles and an unwelcome aesthetic.
     '''
     def rule(self, space, painting):
-        if 'indigenous' in space.categories and painting.category == 'pop art':
-            return False
-        if 'pop art' in space.categories and painting.category == 'indigenous':
-            return False
+        if space.categories:
+            if 'indigenous' in ''.join(space.categories) and painting.category == 'pop art':
+                return False
+            if 'pop art' in ''.join(space.categories) and painting.category == 'indigenous':
+                return False
         return True
-    # TODO: test
+
 
 class PosterRule(Rule):
     '''
@@ -94,13 +103,19 @@ class PosterRule(Rule):
     '''
     def rule(self, space, painting):
         return not (painting.poster and space.contains_poster_flag)
-    # TODO: test
 
 
 class ColourClashRule(Rule):
-    # TODO: test
-    # TODO: documentation
-    def __init__(self):
+    '''
+    This Rule prevents paintings with clashing colour schemes
+    from being hung on the same space.
+    '''
+    def __init__(
+        self,
+        spaces: Union[list, tuple] = (),
+        paintings: Union[list, tuple] = (),
+        ):
+        super().__init__(spaces, paintings)
         self.colour_clash = {
             "red": "green",
             "black": "red",
@@ -111,30 +126,65 @@ class ColourClashRule(Rule):
         self.colour_clash_rev = {v: k for k,v in self.colour_clash.items()}
     
     def rule(self, space, painting):
-        for painting_colour in painting.colours:
-            if painting_colour in self.colour_clash.keys() and \
-                self.colour_clash[painting_colour] in space.colours:
-                return False
-            if painting_colour in self.colour_clash_rev.keys() and \
-                self.colour_clash_rev[painting_colour] in space.colours:
-                return False
+        if space.colours:
+            for painting_colour in painting.colours:
+                if painting_colour in self.colour_clash.keys() and \
+                    self.colour_clash[painting_colour] in space.colours:
+                    return False
+                if painting_colour in self.colour_clash_rev.keys() and \
+                    self.colour_clash_rev[painting_colour] in space.colours:
+                    return False
         return True
 
 
-
 class PrimeMatchRule(Rule):
-    # TODO: test
-    pass
+    '''
+    This Rule prevents a non-prime painting from being hung on a prime
+    space
+    '''
+    def rule(self, space, painting):
+        return (painting.prime_flag and space.prime_flag)
 
 
 class MaxPiecesRule(Rule):
-    # TODO
-    pass
-
+    '''
+    This rule prevents a space that is at capacity from accepting an
+    additional painting.
+    '''
+    def rule(self, space, painting):
+        if space.paintings_hung:
+            return not len(space.paintings_hung) == space.max_pieces
+        else:
+            return True
 
 class SpaceCompleteRule(Rule):
-    pass
+    '''
+    This Rule checks whether the space already is complete.
+    ''' 
+    def rule(self, space, painting):
+        return not space.complete
 
 
 class PaintingCompleteRule(Rule):
-    pass
+    '''
+    This Rule checks whether the candidate painting is already
+    hung on a space
+    ''' 
+    def rule(self, space, painting):
+        return not painting.complete
+
+
+class ContemporaryMasterRule(Rule):
+    '''
+    This Rule checks whether the candidate painting is hung next
+    to a master of the same category.
+    ''' 
+    def rule(self, space, painting):
+        if space.categories:
+            if 'contemporary' in painting.category and 'master' in ' '.join(space.categories):
+                return False
+            elif 'master' in painting.category and 'contemporary' in ' '.join(space.categories):
+                return False
+        return True
+
+# TODO: proportional rule

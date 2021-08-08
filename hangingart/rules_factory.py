@@ -13,11 +13,12 @@ import hangingart.rule as rule
 rules = [
     rule.HorizontalDimRule(),
     rule.VerticalDimRule(),
-    rule.IndigenousPopRule(),
+    rule.IndigenousPopArtRule(),
     rule.PosterRule(),
     rule.ColourClashRule(),
-    rule.PrimeMatchRule(),
-    rule.MaxPiecesRule(),
+    rule.PrimeMatchRule(), 
+    rule.MaxPiecesRule(), 
     rule.SpaceCompleteRule(),
     rule.PaintingCompleteRule(),
+    rule.ContemporaryMasterRule(),
 ]
