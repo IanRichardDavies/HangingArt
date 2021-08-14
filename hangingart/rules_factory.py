@@ -21,4 +21,5 @@ rules = [
     rule.SpaceCompleteRule(),
     rule.PaintingCompleteRule(),
     rule.ContemporaryMasterRule(),
+    rule.ProportionsRule(),
 ]

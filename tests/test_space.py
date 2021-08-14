@@ -9,6 +9,7 @@ import pytest
 from hangingart.painting import Painting
 from hangingart.space import Space
 
+
 def test_default_args():
     test = Space()
     assert test.max_hor_dim == 0.0 

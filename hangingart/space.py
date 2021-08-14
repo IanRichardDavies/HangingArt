@@ -84,8 +84,8 @@ class Space:
             f"""
             {self.room} {self.surface_dir}
             complete: {complete_str}
-            Paintings hung:
-            """
+            Paintings hung:"""
             )
-        for painting in self.paintings_hung:
-            painting.display()
+        if self.paintings_hung:
+            for painting in self.paintings_hung:
+                painting.display()

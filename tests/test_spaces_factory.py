@@ -9,9 +9,11 @@ import pytest
 from hangingart.space import Space
 from hangingart.spaces_factory import generate_spaces, PARAMS
 
+
 def test_len_generate_spaces():
 	tests = generate_spaces()
 	assert len(tests) == len(PARAMS)
+
 
 def test_type_generate_spaces():
 	test_objs = generate_spaces()

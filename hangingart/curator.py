@@ -16,7 +16,6 @@ class Curator:
     Provides the interface necessary for the user to narrow down
     options.
     '''
-    # TODO: make default args using factories
     def __init__(
         self,
         rules,
@@ -48,7 +47,6 @@ class Curator:
         '''
         Interface to the display method of Space objects.
         '''
-        # TODO: test
         for space in self.spaces:
             space.display()
 
@@ -56,24 +54,61 @@ class Curator:
         '''
         Interface to the display method of Painting objects.
         '''
-        # TODO: test
-        for painting in self.painting:
+        for painting in self.paintings:
             painting.display()
 
-    def _match_space(self, description):
-        pass
+    def _match_space(self, description: str) -> int:
+        '''
+        Method that returns the Space object that matches a user's string arg.
+        Example call: 
+        curator._match_space('kitchen N')
 
-    def _match_painting(self, description):
-        pass
+        Paramters
+        ---------
+        description: str
+            A description of the space
 
-    def hang_painting(self, space, painting):
+        Returns
+        -------
+        The index of the matching Space object
+        '''
+        for i, space in enumerate(self.spaces):
+            if description.split()[0] in space.room and \
+                space.surface_dir == description.split()[-1]:
+                return i
+        print ("No such space found.")
+        return -1
+
+    def _match_painting(self, description: str) -> int:
+        '''
+        Method that returns the Painting object that matches a user's string arg.
+        Example call: 
+        curator._match_painting('Several circles')
+
+        Paramters
+        ---------
+        description: str
+            A description of the painting.
+
+        Returns
+        -------
+        The index of the matching Painting object
+        '''
+        for i, painting in enumerate(self.paintings):
+            if description.lower() in painting.name.lower():
+                return i
+        print ("No such painting found.")
+        return -1
+
+    def hang_painting(self, space_str: str, painting_str: str):
         '''
         Method that confirms a space-painting pairing.
 
         '''
-        #TODO: identify space and painting by names - new method
-        space.hang(painting)
-        painting.hang()
+        s_idx = self._match_space(space_str)
+        p_idx = self._match_painting(painting_str)
+        self.spaces[s_idx].hang(self.paintings[p_idx])
+        self.paintings[p_idx].hang()
         self._update_rule_grid()
 
     def _space_with_fewest_options(self):
@@ -109,21 +144,39 @@ class Curator:
         self._space_with_fewest_options()
         self._painting_options_for_min_space()
 
-    def options_available(self, room: str, surface_dir: str):
+    def options_available(self, description: str):
         '''
         Method that prints out the options available for a specific space
         '''
         self._update_rule_grid()
         self.possibles = np.prod(self.rules_grid, axis=0)
         self.space_sums = np.sum(self.possibles, axis=1)
-        idx = -1
-        for i, space in enumerate(self.spaces):
-            if space.room == room and space.surface_dir == surface_dir:
-                idx = i
-                break
-        if idx < 0:
-            print ("No such space found.")
+        idx = self._match_space(description)
         painting_indices = self.possibles[idx]
         for i, boolean in enumerate(painting_indices):
             if boolean:
                 print(self.paintings[i].name)
+
+    def display_this_space(self, description: str) -> None:
+        '''
+        Method that displays the information for a specific Space object.
+
+        Paramters
+        ---------
+        description: str
+            A description of the space
+        '''
+        idx = self._match_space(description)
+        self.spaces[idx].display()
+
+    def display_this_painting(self, description: str) -> None:
+        '''
+        Method that displays the information for a specific Painting object.
+
+        Paramters
+        ---------
+        description: str
+            A description of the painting
+        '''
+        idx = self._match_painting(description)
+        self.paintings[idx].display()

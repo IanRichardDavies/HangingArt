@@ -187,4 +187,20 @@ class ContemporaryMasterRule(Rule):
                 return False
         return True
 
-# TODO: proportional rule
+
+class ProportionsRule(Rule):
+    '''
+    This Rule checks whether the proportions of the painting match
+    the proportions of the space.
+    ''' 
+    def rule(self, space, painting):
+        if space.max_pieces == 1:
+            if (space.max_hor_dim >= space.max_ver_dim) and \
+                (painting.horizontal_dim >= painting.vertical_dim):
+                return True
+            elif (space.max_hor_dim < space.max_ver_dim) and \
+                (painting.horizontal_dim < painting.vertical_dim):
+                return True
+            else:
+                return False
+        return True

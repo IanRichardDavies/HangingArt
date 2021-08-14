@@ -9,15 +9,6 @@ import pytest
 from hangingart.painting import Painting
 from hangingart.space import Space
 
-#TODO: create and move to conftest.py
-@pytest.fixture
-def gen_paintings():
-    painting_params = [
-    ('Several Circles',30,30,'pop art',1,1,['black','purple','blue',],),
-    ('Transformation',50,70,'indigenous',1,1,['orange','brown','blue',],),
-    ]
-    return [Painting(*param) for param in painting_params]
-
 
 def test_default_args():
     test = Painting()
